@@ -1,0 +1,16 @@
+﻿#BNF+IAT 1.0 UTF-8;
+
+!grammar cmd;
+!slot <cmd1>;
+!slot <cmd2>;
+!slot <cmd3>;
+!slot <cmd4>;
+!start <cmdstart>;
+
+<cmdstart>:<cmd1>|<cmd2>|<cmd3>|<cmd4>;
+
+<cmd1>:开灯!id(1)|关灯!id(2)|小欣同学!id(5)|播放视频!id(6)|停止播放!id(7)|大家好!id(8)|谁最帅!id(9)|谁最漂亮!id(10)|小欣再见!id(999);
+<cmd2>:明天天气!id(11)|有什么好吃的!id(12)|打电话!id(13)|发微信!id(14);
+<cmd3>:发文件!id(21)|发顺丰!id(22)|发圆通!id(23);
+<cmd4>:切换图片!id(3)|切换歌曲!id(4)|切换频道!id(5);
+

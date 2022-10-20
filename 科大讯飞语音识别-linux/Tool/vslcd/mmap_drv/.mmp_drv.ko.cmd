@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/share/vslcd/mmap_drv/mmp_drv.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /mnt/hgfs/share/vslcd/mmap_drv/mmp_drv.ko /mnt/hgfs/share/vslcd/mmap_drv/mmp_drv.o /mnt/hgfs/share/vslcd/mmap_drv/mmp_drv.mod.o ;  true

@@ -1,0 +1,83 @@
+一、语音识别  ---> 必须使用科大讯飞的库
+	x86/
+		bin/
+			msc/  ---> 识别的记录文件
+			pcm/  ---> 识别的音频文件
+			asr_record_demo  ---> 可执行文件[*]						cmd.bnf  ---> 识别的语法文件[*]
+			result.xml：SDK识别的结果存档
+		example/
+			asr_record_demo：SDK的例程
+		lib/
+			SDK的识别库	
+		BNF语法手册.pdf
+
+	Makefile：工程管理文件，用于编译程序
+
+二、分析SDK的例程[可选]
+	例程源码：x86/examples/asr_record_demo/asr_record_demo.c
+	2.1 登录账号
+		MSPLogin();
+	2.2 构建语法网络
+		build_grammar();  ---> 加载x86/bin/cmd.bnf语法   ---> 需要一定的时间
+	2.3 开始识别
+		run_asr();
+			2.3.1 与开发板端建立连接
+				init_sock();
+					socket();  ---> 建立未连接套接字
+					bind();    ---> 绑定IP地址作为服务器  192.168.0.68
+					listen();  ---> 把未连接套接字设置为监听套接字
+					accept();  ---> 接受对方的连接   ---> 得到已连接套接字
+			2.3.2 获取音频文件
+				get_audio_file();  --> return "pcm/cmd.pcm"
+			2.3.3 分析音频文件
+				demo_file("pcm/cmd.pcm");
+
+				struct speech_rec_notifier recnotifier =
+				{
+					on_result,        ---->识别的结果
+					on_speech_begin,  ---->开始下一次的识别
+					on_speech_end     ---> 识别结束
+				};
+				
+			2.3.4 初始化引擎语法
+				sr_init();
+
+			2.3.5 把音频传入引擎中，进行识别
+				sr_start_listening();
+			2.3.6 不断进行识别  ---> 引擎不是一下子就识别完毕
+				sr_write_audio_data();
+
+			2.3.7 识别完毕，把结果存在on_result
+				sr_stop_listening();
+					on_result()  --->  show_result()  ---> write(开发板的套接字)
+
+三、如何使用SDK原生包？
+	3.1 修改语法
+		/x86/bin/cmd.bnf
+
+	3.2 通过root用户权限，修改Ubuntu日期为2016.12.15【*】
+		date -s 12/15/2016
+
+	3.3 编译SDK
+		cd ~/x86/examples/asr_record_demo
+		make
+
+	3.4 切换可执行文件的路径下【*】
+		cd ~/x86/bin
+		./asr_record_demo
+		构建离线识别语法网络...
+		构建语法失败！11212    ----> 当前的时间不在SDK的试用日期内，重新执行步骤2
+		语音识别完毕.
+	
+	3.5 再次执行文件
+		./asr_record_demo
+		构建离线识别语法网络...
+		构建语法成功！ 语法ID:cmd
+		离线识别语法网络构建完成，开始识别...
+		wait for connecting ... 
+
+	3.6 如果想增加更加多的语音识别，必须去修改/x86/bin/cmd.bnf,例如增加小爱同学的语音，示例如下：
+<cmd>:开窗!id(1)|开门!id(2)|开灯!id(3)|关窗!id(4)|关门!id(5)|关灯!id(6)|小爱同学!id(7)|小飞同学!id(7)|退出!id(999)|不玩了!id(999);
+		添加完毕之后，必须重新编译该工程。
+
+	注：修改cmd.bnf文件的时候，最好将该文件拷贝共享目录，在windows平台进行修改，因为windows对中文支持非常友好。修改后，再重新拷贝覆盖原文件。

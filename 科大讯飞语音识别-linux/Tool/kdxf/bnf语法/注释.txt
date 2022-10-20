@@ -1,0 +1,17 @@
+#BNF+IAT 1.0 UTF-8;			/* 文档的编码格式为UTF-8 */
+
+!grammar cmd;				/* 语法为cmd */
+!slot <cmd1>;				/* 建立4个槽，分别为cmd1、cmd2、cmd3、cmd4 */
+!slot <cmd2>;
+!slot <cmd3>;
+!slot <cmd4>;
+!start <cmdstart>;			/* 定义开始规则 */
+
+/* 定义cmdstart规则，该规则可以由cmd1、cmd2、cmd3、cmd4其中一个实现 */
+<cmdstart>:<cmd1>|<cmd2>|<cmd3>|<cmd4>;
+
+/* 定义cmd1、cmd2、cmd3、cmd4规则 */
+<cmd1>:开灯!id(1)|关灯!id(2)|切换下一张图片!id(3)|切换上一张图片!id(4)|小欣同学!id(5)|播放视频!id(6)|停止播放!id(7)|大家好!id(8)|谁最帅!id(9)|谁最漂亮!id(10)|小欣再见!id(999);
+<cmd2>:明天天气!id(1)|有什么好吃的!id(2)|打电话!id(3)|发微信!id(4);
+<cmd3>:发文件!id(1)|发顺丰!id(2)|发圆通!id(3);
+<cmd4>:努力学习!id(1)|努力工作!id(2)|天天向上!id(3);
