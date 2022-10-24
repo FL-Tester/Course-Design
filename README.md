@@ -176,6 +176,10 @@ if (QSqlDatabase::contains("qt_sql_default_connection")){ //
 界面没有设计 qt能跑就行
 ![](/res/card_result.jpg)
 
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="/res/card.mp4" type="video/mp4">
+</video>
+
 
 
 
