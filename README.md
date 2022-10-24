@@ -173,7 +173,8 @@ if (QSqlDatabase::contains("qt_sql_default_connection")){ //
 暂时没有
 
 ### 结果展示
-界面没有设计 跑就行
+界面没有设计 qt能跑就行
+![](/res/card_result.jpg)
 
 
 
