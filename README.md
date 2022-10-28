@@ -34,7 +34,7 @@ OLED(SSD1306)(I2C)
 esp-idf + vscode
 #### rcc522
 参考：https://github.com/abobija/esp-idf-rc522
-展示中断处理部分代码
+展示rc522事件处理部分代码
 ```c
 static void rc522_handler(void* arg, esp_event_base_t base, int32_t event_id, void* event_data){
     rc522_event_data_t* data = (rc522_event_data_t*) event_data;

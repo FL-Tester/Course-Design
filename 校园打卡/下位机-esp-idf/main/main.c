@@ -8,8 +8,8 @@ void app_main(void){
 }
 
 static void init_task(void *arg){
+    gpio_bl_init(); // init gpio
     mutex = xSemaphoreCreateMutex();  //创建互斥锁mutex
-
     //初始化rc522
     rc522_create(&config, &scanner);
     rc522_register_events(scanner, RC522_EVENT_ANY, rc522_handler, NULL);
@@ -24,6 +24,7 @@ static void init_task(void *arg){
     vTaskDelete(NULL);  //运行完毕删除任务 
 }
 
+//事件处理函数
 static void rc522_handler(void* arg, esp_event_base_t base, int32_t event_id, void* event_data){
     rc522_event_data_t* data = (rc522_event_data_t*) event_data;
     switch(event_id) {
@@ -61,9 +62,11 @@ static void display_task(void *arg){
             if( card_id_judge(card_id , card_correct_id)){
                 OLEDDisplay_fillRect(oled, 5, 45, 15, 15);
                 OLEDDisplay_display(oled);
+                card_success();
             }else{
                 OLEDDisplay_fillRect(oled, 67, 45, 15, 15);
                 OLEDDisplay_display(oled);
+                card_fail();
             }
             //释放互斥锁mutex
             xSemaphoreGive(mutex);
@@ -134,23 +137,23 @@ static int tcp_client_task(void *arg){
     }
 }
 
-static void push_mqtt_task(void *arg){
-    //连接mqtt服务器
-    esp_mqtt_client_handle_t client_task = esp_mqtt_client_init(&mqtt_cfg);
-    esp_mqtt_client_start(client_task);
+// static void push_mqtt_task(void *arg){
+//     //连接mqtt服务器
+//     esp_mqtt_client_handle_t client_task = esp_mqtt_client_init(&mqtt_cfg);
+//     esp_mqtt_client_start(client_task);
 
-    while(1){
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //阻塞等待rc522_handler通知 后push
-        if (xSemaphoreTake(mutex, 1000) == pdPASS){
-            if (card_id_judge(card_id , card_correct_id)){
-                char card_id_str[20];
-                sprintf(card_id_str, "%llu", card_id);
-                esp_mqtt_client_publish(client_task, "/card_id", card_id_str, 0, 0, 0);
-            }
-            xSemaphoreGive(mutex);//释放互斥锁mutex
-        }
-        //需要subscribe也可以写在这里
+//     while(1){
+//         ulTaskNotifyTake(pdTRUE, portMAX_DELAY); //阻塞等待rc522_handler通知 后push
+//         if (xSemaphoreTake(mutex, 1000) == pdPASS){
+//             if (card_id_judge(card_id , card_correct_id)){
+//                 char card_id_str[20];
+//                 sprintf(card_id_str, "%llu", card_id);
+//                 esp_mqtt_client_publish(client_task, "/card_id", card_id_str, 0, 0, 0);
+//             }
+//             xSemaphoreGive(mutex);//释放互斥锁mutex
+//         }
+//         //需要subscribe也可以写在这里
             
-        vTaskDelay(250 / portTICK_PERIOD_MS);
-    }
-}
+//         vTaskDelay(250 / portTICK_PERIOD_MS);
+//     }
+// }

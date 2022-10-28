@@ -25,10 +25,11 @@
 #include "sdkconfig.h"
 #include "OLEDDisplay.h"
 #include "rc522.h"
+#include "gpio_bl.h"
 
-#define TCP_SERVER_ADRESS    "192.168.0.107"    // TCP服务器地址
+#define TCP_SERVER_ADRESS    "192.168.0.103"    // TCP服务器地址
 #define TCP_PORT             65001              // TCP服务器端口号
-#define mqtt_server          "mqtt://182.61.55.22"
+#define mqtt_server          "mqtt://182.61.xxx.xxx"
 static char *tcp_send_data = "hello world!";   // TCP发送数据
 
 static const char *TAG = "KaiLi-CD"; // for DEBUG
@@ -47,13 +48,13 @@ static rc522_config_t config = {
         .spi.sda_gpio = 22,
 };
 
-esp_mqtt_client_config_t mqtt_cfg = {
-        .uri = "mqtt://182.61.55.22",
-        //.event_handle = mqtt_event_handler,
-        .username = "admin",
-        .password = "password",
-        .port = 1883,
-};
+// esp_mqtt_client_config_t mqtt_cfg = {
+//         .uri = mqtt_server,
+//         //.event_handle = mqtt_event_handler,
+//         .username = "admin",
+//         .password = "password",
+//         .port = 1883,
+// };
 
 static rc522_handle_t scanner;
 SemaphoreHandle_t mutex = NULL;

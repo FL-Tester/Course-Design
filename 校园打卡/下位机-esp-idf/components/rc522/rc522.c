@@ -304,11 +304,11 @@ static uint8_t* rc522_card_write(rc522_handle_t rc522, uint8_t cmd, uint8_t *dat
     }
     else if(cmd == 0x0C) {
         irq = 0x77;
-        irq_wait = 0x30;
+        irq_wait = 0x30; 
     }
 
     rc522_write(rc522, 0x02, irq | 0x80);
-    rc522_clear_bitmask(rc522, 0x04, 0x80);
+    rc522_clear_bitmask(rc522, 0x04, 0x80);  
     rc522_set_bitmask(rc522, 0x0A, 0x80);
     rc522_write(rc522, 0x01, 0x00);
     rc522_write_n(rc522, 0x09, n, data);
@@ -619,6 +619,7 @@ static void rc522_task(void* arg)
 
         vTaskDelay(delay_interval_ms / portTICK_PERIOD_MS);
     }
-
+    
     vTaskDelete(NULL);
 }
+
