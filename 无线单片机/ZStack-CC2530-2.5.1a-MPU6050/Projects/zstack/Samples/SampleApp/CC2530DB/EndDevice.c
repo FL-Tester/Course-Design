@@ -520,8 +520,8 @@ void SampleApp_SendPointToPointMessage( void )
   HalLedBlink( HAL_LED_1, 4, 50, 200 );
   if ( AF_DataRequest( &Point_To_Point_DstAddr,
                        &SampleApp_epDesc,
-                       //SAMPLEAPP_POINT_TO_POINT_CLUSTERID,  //节点1
-                       SAMPLEAPP_POINT_TO_POINT_CLUSTERID_2,//节点2
+                       SAMPLEAPP_POINT_TO_POINT_CLUSTERID,  //节点1
+                       //SAMPLEAPP_POINT_TO_POINT_CLUSTERID_2,//节点2
                        37,
                        buf,
                        &SampleApp_TransID,
